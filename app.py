@@ -8,11 +8,7 @@ from PIL import Image
 
 app = Flask(__name__)
 
-
-# ==========================================
 # CONFIG
-# ==========================================
-
 BOT_TOKEN = os.environ["BOT_TOKEN"]
 WEBHOOK_URL = os.environ["WEBHOOK_URL"].rstrip("/")
 
@@ -25,10 +21,7 @@ TELEGRAM_FILE_API = (
 )
 
 
-# ==========================================
 # Telegram API helper
-# ==========================================
-
 def telegram(method, data=None, files=None):
 
     url = f"{TELEGRAM_API}/{method}"
@@ -45,10 +38,7 @@ def telegram(method, data=None, files=None):
     return response.json()
 
 
-# ==========================================
 # Send message
-# ==========================================
-
 def send_message(chat_id, text, reply_markup=None):
 
     data = {
@@ -65,10 +55,7 @@ def send_message(chat_id, text, reply_markup=None):
     )
 
 
-# ==========================================
 # Answer callback
-# ==========================================
-
 def answer_callback(callback_id):
 
     return telegram(
@@ -79,10 +66,7 @@ def answer_callback(callback_id):
     )
 
 
-# ==========================================
 # Edit message
-# ==========================================
-
 def edit_message(
     chat_id,
     message_id,
@@ -99,10 +83,7 @@ def edit_message(
     )
 
 
-# ==========================================
 # Send document
-# ==========================================
-
 def send_document(
     chat_id,
     file_path,
@@ -133,10 +114,7 @@ def send_document(
     return response
 
 
-# ==========================================
 # Get Telegram file
-# ==========================================
-
 def download_telegram_file(file_id, output_path):
 
     result = telegram(
@@ -164,10 +142,7 @@ def download_telegram_file(file_id, output_path):
         file.write(response.content)
 
 
-# ==========================================
 # Set webhook
-# ==========================================
-
 def setup_webhook():
 
     webhook = f"{WEBHOOK_URL}/webhook"
@@ -188,10 +163,7 @@ def setup_webhook():
     return result
 
 
-# ==========================================
 # START COMMAND
-# ==========================================
-
 def handle_start(message):
 
     chat_id = message["chat"]["id"]
@@ -203,10 +175,7 @@ def handle_start(message):
     )
 
 
-# ==========================================
 # IMAGE RECEIVED
-# ==========================================
-
 def handle_image(message):
 
     chat_id = message["chat"]["id"]
@@ -293,10 +262,7 @@ def handle_image(message):
     ] = file_id
 
 
-# ==========================================
 # CONVERT IMAGE
-# ==========================================
-
 def handle_conversion(callback_query):
 
     callback_id = callback_query["id"]
@@ -498,10 +464,7 @@ def handle_conversion(callback_query):
         )
 
 
-# ==========================================
 # WEBHOOK
-# ==========================================
-
 @app.post("/webhook")
 def webhook():
 
@@ -574,10 +537,7 @@ def webhook():
         ), 500
 
 
-# ==========================================
 # HEALTH CHECK
-# ==========================================
-
 @app.get("/")
 def home():
 
@@ -589,10 +549,7 @@ def home():
     )
 
 
-# ==========================================
 # WEBHOOK STATUS
-# ==========================================
-
 @app.get("/webhook-info")
 def webhook_info():
 
@@ -603,10 +560,7 @@ def webhook_info():
     return jsonify(result)
 
 
-# ==========================================
 # SET WEBHOOK
-# ==========================================
-
 @app.get("/setup-webhook")
 def setup_webhook_route():
 
